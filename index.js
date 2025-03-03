@@ -1,18 +1,17 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
-
 function drawBackground() {
-    ctx.fillStyle = '#74CFF6';
+    ctx.fillStyle = '#aee3cd';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 
 function drawButton(x, y, width, height, text) {
-    ctx.fillStyle = '#000'; //
+    ctx.fillStyle = '#8A2BE2FF';
     ctx.fillRect(x, y, width, height);
-    ctx.fillStyle = '#FFF'; //
-    ctx.font = '20px Pixelify Sans';
+    ctx.fillStyle = '#000000';
+    ctx.font = '20px Pixelify Sans, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(text, x + width / 2, y + height / 1.5);
 }

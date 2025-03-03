@@ -24,10 +24,24 @@
 
 <main style="display: flex; justify-content: center;">
     <canvas id="myCanvas" width="900" height="710"></canvas>
+
+    <div id="gameOverModal" style="display: none;">
+        <div id="modalContent">
+            <h2>Game Over</h2>
+            <p>Final Score: <span id="finalScore"></span></p>
+            <input type="text" id="playerName" placeholder="Enter your name">
+            <button id="submitScoreButton">Submit highscore</button>
+            <button id="watchHighscoresButton">Watch highscores</button>
+            <button id="playAgainButton">Play again</button>
+        </div>
+    </div>
+
 </main>
 
 
 <script src="mechanics.js"></script>
+
+
 
 </body>
 </html>

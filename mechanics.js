@@ -1,8 +1,15 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
-const img = new Image();
-img.src = 'billeder/stordiamant.png';
+const diamondImages = [
+    new Image(), // Størrelse 30
+    new Image(), // Størrelse 50
+    new Image()  // Størrelse 70
+];
+
+diamondImages[0].src = 'billeder/nydiamant.png';
+diamondImages[1].src = 'billeder/nydiamant2.png';
+diamondImages[2].src = 'billeder/nydiamant3.png';
 
 const bombImg = new Image();
 bombImg.src = 'billeder/bombe.png';
@@ -12,9 +19,9 @@ let gameOver = false;
 let lastSpeedIncreaseTime = Date.now();
 
 const diamondSizes = [
-    { size: 30, points: 10, baseSpeed: 3 },
-    { size: 50, points: 5, baseSpeed: 2 },
-    { size: 70, points: 2, baseSpeed: 1.5 }
+    { size: 50, points: 10, baseSpeed: 3 },
+    { size: 70, points: 5, baseSpeed: 2 },
+    { size: 90, points: 2, baseSpeed: 1.5 }
 ];
 
 const bombSizes = [
@@ -28,13 +35,41 @@ const paddle = {
     x: (canvas.width - 100) / 2,
 };
 
-canvas.addEventListener('mousemove', (event) => {
-    const rect = canvas.getBoundingClientRect();
-    paddle.x = Math.min(Math.max(event.clientX - rect.left - paddle.width / 2, 0), canvas.width - paddle.width);
+canvas.addEventListener('click', () => {
+    canvas.requestPointerLock();
+});
+
+document.addEventListener('mousemove', (event) => {
+    if (document.pointerLockElement === canvas) {
+        paddle.x += event.movementX;
+
+        paddle.x = Math.min(Math.max(paddle.x, 0), canvas.width - paddle.width);
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        document.exitPointerLock();
+    }
 });
 
 let diamonds = Array.from({ length: 3 }, createDiamond);
 let bombs = Array.from({ length: 2 }, createBomb);
+
+// Modal elements
+const gameOverModal = document.getElementById('gameOverModal');
+const finalScoreElement = document.getElementById('finalScore');
+const playAgainButton = document.getElementById('playAgainButton');
+const submitScoreButton = document.getElementById('submitScoreButton');
+const watchHighscoresButton = document.getElementById('watchHighscoresButton'); // Tilføjet
+
+// Add event listeners for modal buttons
+playAgainButton.addEventListener('click', restartGame);
+submitScoreButton.addEventListener('click', submitHighScore);
+
+watchHighscoresButton.addEventListener('click', () => {
+    window.location.href = 'highscore.php';
+});
 
 function createDiamond() {
     let type = diamondSizes[Math.floor(Math.random() * diamondSizes.length)];
@@ -61,8 +96,12 @@ function createBomb() {
 
 function drawDiamonds() {
     diamonds.forEach(diamond => {
-        if (diamond.delayTime <= 0 && img.complete) {
-            ctx.drawImage(img, diamond.x, diamond.y, diamond.size, diamond.size);
+        if (diamond.delayTime <= 0) {
+            // Find the correct image for the diamond based on its size
+            let imgIndex = diamondSizes.findIndex(d => d.size === diamond.size);
+            if (diamondImages[imgIndex].complete) {
+                ctx.drawImage(diamondImages[imgIndex], diamond.x, diamond.y, diamond.size, diamond.size);
+            }
         }
     });
 }
@@ -86,28 +125,22 @@ function drawScore() {
     ctx.fillText(`Score: ${score}`, 10, 30);
 }
 
-function drawGameOver() {
-    ctx.fillStyle = 'red';
-    ctx.font = '40px Pixelify Sans';
-    ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2 - 40);
-
-    ctx.fillStyle = '#000';
-    ctx.font = '30px Pixelify Sans';
-    ctx.fillText(`Final Score: ${score}`, canvas.width / 2 - 100, canvas.height / 2);
-
-    // Draw buttons
-    drawButton('Play Again', canvas.width / 2 - 100, canvas.height / 2 + 50, restartGame);
-    drawButton('Submit High Score', canvas.width / 2 - 100, canvas.height / 2 + 100, submitHighScore);
+function showGameOverModal() {
+    finalScoreElement.textContent = score;
+    gameOverModal.style.display = 'flex';
 }
 
-
+function drawGameOver() {
+    // Show the game over modal
+    showGameOverModal();
+}
 
 function updateDiamonds() {
     let currentTime = Date.now();
 
     if (currentTime - lastSpeedIncreaseTime >= 10000) {
-        diamonds.forEach(diamond => diamond.speed += 2);
-        bombs.forEach(bomb => bomb.speed += 2);
+        diamonds.forEach(diamond => diamond.speed += 4);
+        bombs.forEach(bomb => bomb.speed += 4);
         lastSpeedIncreaseTime = currentTime;
     }
 
@@ -143,18 +176,27 @@ function updateBombs() {
             resetBomb(bomb);
         }
     });
+
+    if (gameOver) {
+        drawGameOver();
+        document.exitPointerLock();
+    }
 }
 
 function resetDiamond(diamond) {
-    Object.assign(diamond, createDiamond());
+    let newDiamond = createDiamond();
+    newDiamond.speed = diamond.speed;
+    Object.assign(diamond, newDiamond);
 }
 
 function resetBomb(bomb) {
-    Object.assign(bomb, createBomb());
+    let newBomb = createBomb();
+    newBomb.speed = bomb.speed;
+    Object.assign(bomb, newBomb);
 }
 
 function draw() {
-    ctx.fillStyle = '#74CFF6';
+    ctx.fillStyle = '#aee3cd';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (!gameOver) {
@@ -165,9 +207,26 @@ function draw() {
         updateDiamonds();
         updateBombs();
         requestAnimationFrame(draw);
-    } else {
-        drawGameOver();
     }
 }
 
-draw();
+function restartGame() {
+    gameOver = false;
+    score = 0;
+    diamonds = Array.from({ length: 3 }, createDiamond);
+    bombs = Array.from({ length: 2 }, createBomb);
+    gameOverModal.style.display = 'none';
+    canvas.requestPointerLock();
+    draw();
+}
+
+function submitHighScore() {
+    alert('High Score Submitted!');
+}
+
+function startGame() {
+    canvas.requestPointerLock();
+    draw();  // Start game loop
+}
+
+startGame();
