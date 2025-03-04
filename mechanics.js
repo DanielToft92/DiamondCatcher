@@ -220,7 +220,38 @@ function restartGame() {
 }
 
 function submitHighScore() {
-    alert('High Score Submitted!');
+    const playerNameElement = document.querySelector('#playerName')
+    console.log(score)
+    console.log(JSON.stringify({
+        player: playerNameElement.value,
+        score: score,
+    }))
+
+
+
+    fetch(
+        'submit-highscore.php',
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                player: playerNameElement.value,
+                score: score,
+            }),
+        }
+    )
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+        })
+        .catch(function (error){
+            console.error(error);
+        });
 }
 
 function startGame() {

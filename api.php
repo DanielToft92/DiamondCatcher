@@ -1,25 +1,38 @@
 <?php
 
+$config = require 'config.php';
+
 function apiCall(string $method, string $url, ?array $payload = null): array
 {
-    $token = '26|y09UJ961GfQLWzGefguwhNg0bcsRYsEcGZEC9KgFe7feb342';
+    global $config;
+
     $headers = [
         'Accept: application/json',
         'Content-type: application/json',
-        'Authorization: Bearer ' . $token,
+        'Authorization: Bearer ' . $config['api_token'],
     ];
+
+    $baseUrl = rtrim($config['api_base_url'], '/') . '/';
 
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_CUSTOMREQUEST => $method,
-        CURLOPT_URL => $url,
+        CURLOPT_URL => $baseUrl . $url,
         CURLOPT_HTTPHEADER => $headers,
         CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => $config['environment'] === 'production',
     ]);
     if ($payload) {
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload, JSON_THROW_ON_ERROR));
     }
     $responseData = curl_exec($curl);
+
+    if ($responseData === false) {
+        $error = curl_error($curl);
+        echo 'CURL Error: ' . $error;
+        curl_close($curl);
+        exit;
+    }
 
     // Check if the response code indicates an error.
     // 4xx and 5xx are client errors and server errors.
