@@ -97,7 +97,6 @@ function createBomb() {
 function drawDiamonds() {
     diamonds.forEach(diamond => {
         if (diamond.delayTime <= 0) {
-            // Find the correct image for the diamond based on its size
             let imgIndex = diamondSizes.findIndex(d => d.size === diamond.size);
             if (diamondImages[imgIndex].complete) {
                 ctx.drawImage(diamondImages[imgIndex], diamond.x, diamond.y, diamond.size, diamond.size);
@@ -138,9 +137,9 @@ function drawGameOver() {
 function updateDiamonds() {
     let currentTime = Date.now();
 
-    if (currentTime - lastSpeedIncreaseTime >= 10000) {
-        diamonds.forEach(diamond => diamond.speed += 4);
-        bombs.forEach(bomb => bomb.speed += 4);
+    if (currentTime - lastSpeedIncreaseTime >= 5000) {
+        diamonds.forEach(diamond => diamond.speed += 1);
+        bombs.forEach(bomb => bomb.speed += 1);
         lastSpeedIncreaseTime = currentTime;
     }
 
