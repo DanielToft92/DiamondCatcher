@@ -22,15 +22,15 @@ canvas {
 
 #modalContent {
     font-family: 'Pixelify Sans', sans-serif;
-    background-color: aqua;
+    background-color: #aee3cd;
     padding: 20px;
     border-radius: 10px;
     border: 6px solid blueviolet;
     text-align: center;
     display: flex;
-    flex-direction: column; /* Ensures everything stacks vertically */
+    flex-direction: column;
     align-items: center;
-    gap: 10px; /* Adds spacing between elements */
+    gap: 10px;
 }
 
 #gameOverModal button {
@@ -45,7 +45,7 @@ canvas {
 }
 
 #playerName {
-    width: 80%; /* Makes the input field a nice width */
+    width: 80%;
     padding: 10px;
     font-size: 16px;
     text-align: center;
