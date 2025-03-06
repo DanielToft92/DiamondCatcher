@@ -220,14 +220,12 @@ function restartGame() {
 }
 
 function submitHighScore() {
-    const playerNameElement = document.querySelector('#playerName')
-    console.log(score)
+    const playerNameElement = document.querySelector('#playerName');
+    console.log(score);
     console.log(JSON.stringify({
         player: playerNameElement.value,
         score: score,
-    }))
-
-
+    }));
 
     fetch(
         'submit-highscore.php',
@@ -248,11 +246,13 @@ function submitHighScore() {
         })
         .then(function (data) {
             console.log(data);
+            alert('Highscore sendt!'); // Popup alert after successful submission
         })
         .catch(function (error){
             console.error(error);
         });
 }
+
 
 function startGame() {
     canvas.requestPointerLock();
