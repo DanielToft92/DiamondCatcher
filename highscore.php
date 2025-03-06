@@ -17,7 +17,7 @@
 <main style="display: flex; justify-content: center; position: relative;">
     <canvas id="myCanvas" width="900" height="680"></canvas>
     <iframe id="highscoreFrame"
-            src="https://highscores.martindilling.com/games/72/embed?"
+            src="https://highscores.martindilling.com/games/73/embed?"
             title="Highscore table for Diamond Catcher"
             style="position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
                    width: 400px; height: 300px; border: none; background: white;">
