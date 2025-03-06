@@ -24,7 +24,52 @@
     </iframe>
 </main>
 
-<script src="highscore.js"></script>
+<script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const button = {
+        x: canvas.width / 2 - 100,
+        y: canvas.height - 100,
+        width: 200,
+        height: 50,
+        text: "Back to frontpage"
+    };
+
+    function drawBackground() {
+        ctx.fillStyle = '#aee3cd';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawButton() {
+        ctx.fillStyle = "#8A2BE2FF";
+        ctx.fillRect(button.x, button.y, button.width, button.height);
+
+        ctx.fillStyle = "black";
+        ctx.font = "20px Pixelify Sans";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(button.text, button.x + button.width / 2, button.y + button.height / 2);
+    }
+
+    function isInsideButton(x, y) {
+        return x > button.x && x < button.x + button.width &&
+            y > button.y && y < button.y + button.height;
+    }
+
+    canvas.addEventListener('click', function(event) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        if (isInsideButton(mouseX, mouseY)) {
+            window.location.href = 'index.php';
+        }
+    });
+
+    drawBackground();
+    drawButton();
+</script>
 
 </body>
 </html>

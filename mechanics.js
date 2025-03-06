@@ -2,9 +2,9 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 const diamondImages = [
-    new Image(), // Størrelse 30
-    new Image(), // Størrelse 50
-    new Image()  // Størrelse 70
+    new Image(),
+    new Image(),
+    new Image()
 ];
 
 diamondImages[0].src = 'billeder/nydiamant.png';
@@ -19,9 +19,9 @@ let gameOver = false;
 let lastSpeedIncreaseTime = Date.now();
 
 const diamondSizes = [
-    { size: 50, points: 10, baseSpeed: 3 },
-    { size: 70, points: 5, baseSpeed: 2 },
-    { size: 90, points: 2, baseSpeed: 1.5 }
+    { size: 50, points: 10, baseSpeed: 4 },
+    { size: 70, points: 5, baseSpeed: 3 },
+    { size: 90, points: 2, baseSpeed: 2.5 }
 ];
 
 const bombSizes = [
@@ -138,8 +138,8 @@ function updateDiamonds() {
     let currentTime = Date.now();
 
     if (currentTime - lastSpeedIncreaseTime >= 5000) {
-        diamonds.forEach(diamond => diamond.speed += 1);
-        bombs.forEach(bomb => bomb.speed += 1);
+        diamonds.forEach(diamond => diamond.speed += 0.5);
+        bombs.forEach(bomb => bomb.speed += 0.5);
         lastSpeedIncreaseTime = currentTime;
     }
 
@@ -256,7 +256,7 @@ function submitHighScore() {
 
 function startGame() {
     canvas.requestPointerLock();
-    draw();  // Start game loop
+    draw();
 }
 
 startGame();
