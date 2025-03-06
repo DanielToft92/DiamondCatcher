@@ -246,7 +246,7 @@ function submitHighScore() {
         })
         .then(function (data) {
             console.log(data);
-            alert('Highscore sendt!'); // Popup alert after successful submission
+            alert('Highscore send!');
         })
         .catch(function (error){
             console.error(error);
