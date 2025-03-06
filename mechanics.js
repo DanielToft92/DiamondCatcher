@@ -56,14 +56,12 @@ document.addEventListener('keydown', (event) => {
 let diamonds = Array.from({ length: 3 }, createDiamond);
 let bombs = Array.from({ length: 2 }, createBomb);
 
-// Modal elements
 const gameOverModal = document.getElementById('gameOverModal');
 const finalScoreElement = document.getElementById('finalScore');
 const playAgainButton = document.getElementById('playAgainButton');
 const submitScoreButton = document.getElementById('submitScoreButton');
 const watchHighscoresButton = document.getElementById('watchHighscoresButton'); // Tilføjet
 
-// Add event listeners for modal buttons
 playAgainButton.addEventListener('click', restartGame);
 submitScoreButton.addEventListener('click', submitHighScore);
 
@@ -130,7 +128,6 @@ function showGameOverModal() {
 }
 
 function drawGameOver() {
-    // Show the game over modal
     showGameOverModal();
 }
 
